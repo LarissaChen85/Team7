@@ -1,9 +1,11 @@
 import static org.junit.Assert.*;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import java.io.File;
+import java.io.IOException;
 
 public class StorageTest {
 
@@ -12,7 +14,7 @@ public class StorageTest {
 	private Task task2;
 	private ToDoList todolist;
 	private Storage storage;
-	private File expected_file = new File("expected.csv");
+	private File expected_file = new File("test/expected.csv");
 
 	@Before
 	public void setUp() throws Exception {
@@ -37,7 +39,13 @@ public class StorageTest {
 	public void testWrite() {
 		storage.write(todolist);
 		File result_file =  new File("task.csv");
-		assertEquals("The files differ!", expected_file, result_file);
+		try {
+			assertTrue("The files differ!", FileUtils.contentEquals(expected_file, result_file));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("File comparison error!");
+		}
 	}
 	@Test
 	public void testRead() {

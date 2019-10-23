@@ -5,5 +5,10 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="src" path="lib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="C:/Users/Jamie/workspace/Team7/ToDoList Workshop/lib/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jamie/workspace/Team7/ToDoList Workshop/lib/commons-io-2.6-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jamie/workspace/Team7/ToDoList Workshop/lib/commons-io-2.6-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jamie/workspace/Team7/ToDoList Workshop/lib/commons-io-2.6-tests.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jamie/workspace/Team7/ToDoList Workshop/lib/commons-io-2.6-test-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
