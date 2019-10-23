@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class ToDoList {
 private HashMap<String, Task> tasks = new HashMap<String, Task>();
@@ -47,5 +48,25 @@ private HashMap<String, Task> tasks = new HashMap<String, Task>();
 			if (task.isComplete() == true)
 				completedTasks.add(task);
 		return completedTasks;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if(o == this) {
+			return true;
+		}
+		if(!(o instanceof ToDoList)) {
+			return false;
+		}
+		ToDoList l = (ToDoList) o;
+		if(l.getAllTasks().size() != this.getAllTasks().size()) {
+			return false;
+		}
+		Iterator<Task> it1 = l.getAllTasks().iterator();
+		Iterator<Task> it2 = this.getAllTasks().iterator();
+		while(it1.hasNext() && it2.hasNext()) {
+			if(!(it1.next().equals(it2.next()))) return false;
+		}
+		return true;
 	}
 }

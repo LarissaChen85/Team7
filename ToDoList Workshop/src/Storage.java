@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 
 public class Storage {
 	private String filename = "task.csv";
@@ -26,8 +27,24 @@ public class Storage {
 		}
 	}
 	public ToDoList read() {
-		// Add code here
-		//addTask
-		return null;
+		ToDoList result = new ToDoList();
+		try {
+			BufferedReader bufreader = new BufferedReader(new FileReader(filename));
+			bufreader.readLine();
+			String row;
+			while((row = bufreader.readLine()) != null) {
+				String[] data = row.split(",");
+				result.addTask(new Task(data[0],Boolean.parseBoolean(data[1])));
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return result;
 	}
 }
