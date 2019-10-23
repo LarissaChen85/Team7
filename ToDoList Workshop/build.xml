@@ -5,27 +5,32 @@
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="ToDoList Workshop">
     <property environment="env"/>
+    <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="12"/>
     <property name="source" value="12"/>
-    <path id="lib">
-        <pathelement location="./org.junit.jupiter.api_5.5.1.v20190826-0900.jar"/>
-        <pathelement location="./org.junit.jupiter.engine_5.5.1.v20190826-0900.jar"/>
-        <pathelement location="./org.junit.jupiter.migrationsupport_5.5.1.v20190826-0900.jar"/>
-        <pathelement location="./org.junit.jupiter.params_5.5.1.v20190826-0900.jar"/>
-        <pathelement location="./org.junit.platform.commons_1.5.1.v20190826-0900.jar"/>
-        <pathelement location="./org.junit.platform.engine_1.5.1.v20190826-0900.jar"/>
-        <pathelement location="./org.junit.platform.launcher_1.5.1.v20190826-0900.jar"/>
-        <pathelement location="./org.junit.platform.runner_1.5.1.v20190826-0900.jar"/>
-        <pathelement location="./org.junit.platform.suite.api_1.5.1.v20190826-0900.jar"/>
-        <pathelement location="./org.junit.vintage.engine_5.5.1.v20190826-0900.jar"/>
-        <pathelement location="./org.opentest4j_1.2.0.v20190826-0900.jar"/>
-        <pathelement location="./org.apiguardian_1.1.0.v20190826-0900.jar"/>
-        <pathelement location="./org.junit_4.12.0.v201504281640/junit.jar"/>
-        <pathelement location="./org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
+    <path id="JUnit 5.libraryclasspath">
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.junit.jupiter.api_5.5.1.v20190826-0900.jar"/>
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.junit.jupiter.engine_5.5.1.v20190826-0900.jar"/>
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.junit.jupiter.migrationsupport_5.5.1.v20190826-0900.jar"/>
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.junit.jupiter.params_5.5.1.v20190826-0900.jar"/>
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.junit.platform.commons_1.5.1.v20190826-0900.jar"/>
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.junit.platform.engine_1.5.1.v20190826-0900.jar"/>
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.junit.platform.launcher_1.5.1.v20190826-0900.jar"/>
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.junit.platform.runner_1.5.1.v20190826-0900.jar"/>
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.junit.platform.suite.api_1.5.1.v20190826-0900.jar"/>
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.junit.vintage.engine_5.5.1.v20190826-0900.jar"/>
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.opentest4j_1.2.0.v20190826-0900.jar"/>
+        <pathelement location="../../../../../../../../Program Files/eclipse-java-2019-09-R-win32-x86_64/eclipse/plugins/org.apiguardian_1.1.0.v20190826-0900.jar"/>
+        <pathelement location="./lib/org.junit_4.12.0.v201504281640/junit.jar"/>
+        <pathelement location="./lib/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
     </path>
     <path id="ToDoList Workshop.classpath">
         <pathelement location="bin"/>
+        <path refid="JUnit 5.libraryclasspath"/>
+    </path>
+    <path id="run.ToDoListTest.classpath">
+        <path refid="ToDoList Workshop.classpath"/>
         <path refid="JUnit 5.libraryclasspath"/>
     </path>
     <target name="init">
@@ -37,6 +42,11 @@
         </copy>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="test">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="lib">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -52,6 +62,7 @@
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
             <src path="test"/>
+            <src path="lib"/>
             <classpath refid="ToDoList Workshop.classpath"/>
         </javac>
     </target>
@@ -68,5 +79,22 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
+    </target>
+    <target name="ToDoListTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="ToDoListTest" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="run.ToDoListTest.classpath"/>
+        </junit>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
     </target>
 </project>
